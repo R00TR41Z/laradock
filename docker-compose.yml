@@ -3,10 +3,7 @@ version: "3.7"
 services:
     # image project
     app:
-        build:
-            context: .
-            dockerfile: Dockerfile
-        restart: unless-stopped
+        image: r00tr41z/laradock:1.0.0
         working_dir: /var/www/
         volumes:
             - ./:/var/www
