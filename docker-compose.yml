@@ -9,8 +9,6 @@ services:
             - ./:/var/www
         depends_on:
             - redis
-        networks:
-            - laravel
 
     # nginx
     nginx:
@@ -21,24 +19,20 @@ services:
         volumes:
             - ./:/var/www
             - ./docker/nginx/:/etc/nginx/conf.d/
-        networks:
-            - laravel
 
-    # db mysql
+    # db mariadb
     db:
         image: mariadb:10
         restart: unless-stopped
         environment:
-            MARIADB_DATABASE: ${DB_DATABASE:-laravel}
-            MARIADBL_ROOT_PASSWORD: ${DB_PASSWORD:-root}
-            MARIADB_PASSWORD: ${DB_PASSWORD:-userpass}
-            MARIADB_USER: ${DB_USERNAME:-username}
+            MYSQL_DATABASE: ${DB_DATABASE:-laravel}
+            MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:-root}
+            MYSQL_PASSWORD: ${DB_PASSWORD:-userpass}
+            MYSQL_USER: ${DB_USERNAME:-username}
         volumes:
             - ./.docker/mysql/dbdata:/var/lib/mysql
         ports:
             - "3388:3306"
-        networks:
-            - laravel
 
     # PHPMyAdmin
     phpmyadmin:
@@ -50,15 +44,7 @@ services:
             PMA_HOST: db
             PMA_PORT: 3306
             MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:-userpass}
-        networks:
-            - laravel
 
     # redis
     redis:
         image: redis:alpine
-        networks:
-            - laravel
-
-networks:
-    laravel:
-        driver: bridge
